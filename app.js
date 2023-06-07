@@ -54,6 +54,20 @@ app.get("/editar/:id", function(req, res){
 app.get("/excluir/:id", function(req, res){
 })
 
+app.get("/excluir/:id", function(req, res) {
+    var id = req.params.id;
+    var agendamentosRef = db.collection('agendamentos').doc(id);
+    agendamentosRef.delete()
+        .then(function() {
+            console.log("Documento excluído com sucesso!");
+            res.sendStatus(204);
+        })
+        .catch(function(error) {
+            console.log("Erro ao excluir documento: " + error);
+            res.sendStatus(500);
+        });
+});
+
 app.post("/cadastrar", function(req, res){
     var result = db.collection('agendamentos').add({
         nome: req.body.nome,
@@ -62,7 +76,7 @@ app.post("/cadastrar", function(req, res){
         data_contato: req.body.data_contato,
         observacao: req.body.observacao
     }).then(function(){
-        console.log('Added document');
+        console.log('Adicionado');
         res.redirect('/')
     })
 })
